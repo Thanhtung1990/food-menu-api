@@ -1,62 +1,47 @@
 package model;
+
 import com.google.gson.JsonElement;
 
 import java.sql.Array;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class Food_Menu_Info {
+public class Food_Combine_Flexible_Data {
 
-    private UUID food_place_id;
     private UUID food_id;
     private Array food_multi_img_url;
     private Array food_multi_video_url;
     private String food_single_price;
     private Double food_score_review;
     private String food_shared_amount;
-    private boolean food_is_created;
-    private boolean food_is_removed;
     private Timestamp food_created_since;
-    private Timestamp food_removed_since;
     private int food_issues_warning_level;
+    private List<JsonElement> list_description_food;
 
-    // constructor to insert data
-    public Food_Menu_Info(UUID food_place_id,
-                          UUID food_id,
-                          Array food_multi_img_url,
-                          Array food_multi_video_url,
-                          String food_single_price,
-                          Double food_score_review,
-                          String food_shared_amount,
-                          boolean food_is_created,
-                          boolean food_is_removed,
-                          Timestamp food_created_since,
-                          Timestamp food_removed_since,
-                          int food_issues_warning_level) {
+    // Constructor to Select query data
+    public Food_Combine_Flexible_Data(UUID food_id,
+                                      Array food_multi_img_url,
+                                      Array food_multi_video_url,
+                                      String food_single_price,
+                                      Double food_score_review,
+                                      String food_shared_amount,
+                                      Timestamp food_created_since,
+                                      int food_issues_warning_level,
+                                      List<JsonElement> list_description_food) {
 
-        this.food_place_id = food_place_id;
         this.food_id = food_id;
         this.food_multi_img_url = food_multi_img_url;
         this.food_multi_video_url = food_multi_video_url;
         this.food_single_price = food_single_price;
         this.food_score_review = food_score_review;
         this.food_shared_amount = food_shared_amount;
-        this.food_is_created = food_is_created;
-        this.food_is_removed = food_is_removed;
         this.food_created_since = food_created_since;
-        this.food_removed_since = food_removed_since;
         this.food_issues_warning_level = food_issues_warning_level;
-
+        this.list_description_food = list_description_food;
     }
 
-    public UUID getFood_place_id() {
-        return food_place_id;
-    }
-
-    public void setFood_place_id(UUID food_place_id) {
-        this.food_place_id = food_place_id;
-    }
 
     public UUID getFood_id() {
         return food_id;
@@ -65,8 +50,6 @@ public class Food_Menu_Info {
     public void setFood_id(UUID food_id) {
         this.food_id = food_id;
     }
-
-
 
     public Array getFood_multi_img_url() {
         return food_multi_img_url;
@@ -92,8 +75,6 @@ public class Food_Menu_Info {
         this.food_single_price = food_single_price;
     }
 
-
-
     public Double getFood_score_review() {
         return food_score_review;
     }
@@ -110,36 +91,12 @@ public class Food_Menu_Info {
         this.food_shared_amount = food_shared_amount;
     }
 
-    public boolean getFood_is_created() {
-        return food_is_created;
-    }
-
-    public void setFood_is_created(boolean food_is_created) {
-        this.food_is_created = food_is_created;
-    }
-
-    public boolean getFood_is_removed() {
-        return food_is_removed;
-    }
-
-    public void setFood_is_removed(boolean food_is_removed) {
-        this.food_is_removed = food_is_removed;
-    }
-
     public Timestamp getFood_created_since() {
         return food_created_since;
     }
 
     public void setFood_created_since(Timestamp food_created_since) {
         this.food_created_since = food_created_since;
-    }
-
-    public Timestamp getFood_removed_since() {
-        return food_removed_since;
-    }
-
-    public void setFood_removed_since(Timestamp food_removed_since) {
-        this.food_removed_since = food_removed_since;
     }
 
     public int getFood_issues_warning_level() {
@@ -150,19 +107,11 @@ public class Food_Menu_Info {
         this.food_issues_warning_level = food_issues_warning_level;
     }
 
+    public List<JsonElement> getList_description_food() {
+        return list_description_food;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public void setList_description_food(List<JsonElement> list_description_food) {
+        this.list_description_food = list_description_food;
+    }
 }

@@ -1,2 +1,4 @@
-package utils;public class RedisUtil {
+package utils;
+
+public class RedisUtil {
 }

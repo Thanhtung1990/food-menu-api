@@ -1,2 +1,146 @@
-package PACKAGE_NAME;public class MainAPI {
+import controller.Food_Description_Controller;
+import controller.Food_Menu_Controller;
+import model.Food_Description_Info;
+import model.Food_Menu_Info;
+import utils.JSONUtil;
+import utils.PostgreSQLJDBC;
+
+import java.sql.Array;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static spark.Spark.*;
+
+public class MainAPI {
+
+    private static Food_Menu_Controller food_menu_controller = new Food_Menu_Controller();
+    private static Food_Description_Controller food_description_controller = new Food_Description_Controller();
+    private static PostgreSQLJDBC post_Connection = new PostgreSQLJDBC();
+
+    public static void main(String[] args) {
+
+        port(5002);
+
+        PostgreSQLJDBC post_Connection = new PostgreSQLJDBC();
+
+        // get number of cores CPU are running
+        int coreCount = Runtime.getRuntime().availableProcessors();
+
+        // Programming Concurrency in Java to process multi-request from Clients
+        // declare new ThreadPool
+        ExecutorService service = Executors.newFixedThreadPool(coreCount);
+
+//**************************************** CRUD API ****************************************
+// POST New Food Place from Shop account
+        service.execute(new new_food_menu_Task());
+
+// GET all detail data of food_id from food_menu, food_description tables by food_place_id
+        service.execute(new food_menu_in_shop_Task());
+
+
+
+
+
+
+
+    }// end void main
+
+//**************************************** CRUD API ****************************************
+// POST New Food Place from Shop account
+    static class new_food_menu_Task implements Runnable{
+        @Override
+        public void run() {
+
+            post("/v1/food-menu-operation/new-food-menu", (req, res) -> {
+
+                // get data body to Java class object
+                Array  food_multi_img_url = post_Connection.postgreSQlConnect().createArrayOf("STRING", req.queryParamsValues("food_multi_img_url")) ;
+                Array  food_multi_video_url = post_Connection.postgreSQlConnect().createArrayOf("STRING", req.queryParamsValues("food_multi_video_url")) ;
+
+                Food_Menu_Info food_menu_info = new Food_Menu_Info(UUID.fromString(req.queryParams("food_place_id")),
+                                                                null,
+                                                                food_multi_img_url,
+                                                                food_multi_video_url,
+                                                                req.queryParams("food_name_multi_lang"),
+                                                                0.0,
+                                                                "",
+                                                                true,
+                                                                false,
+                                                                Timestamp.from(Instant.now()),
+                                                                Timestamp.from(Instant.now()),
+                                                                0);
+
+                // insert data to DB and return response
+                JSONUtil jsonUtil = new JSONUtil();
+
+                // creating a new map to clone data from method food_menu_controller
+                Map<String, String> element_data = new HashMap<String, String>();
+
+                // clone data
+                element_data.putAll(food_menu_controller.InsertNewFood_In_Menu_Controller(food_menu_info));
+
+                // creating new object of food_description
+                Food_Description_Info food_description_info = new Food_Description_Info(UUID.fromString(element_data.get("food_id")),
+                                                                                        null,
+                                                                                        req.queryParams("language_type"),
+                                                                                        req.queryParams("food_name"),
+                                                                                        post_Connection.postgreSQlConnect().createArrayOf("STRING", req.queryParamsValues("food_combo_name")),
+                                                                                        post_Connection.postgreSQlConnect().createArrayOf("STRING", req.queryParamsValues("food_price_in_combo")),
+                                                                                        req.queryParams("food_description"));
+
+                // put data of food description in multi languages to DB and get return description_id
+                String description_id = food_description_controller.InsertNewFood_Description_Controller(food_description_info).get("description_id");
+
+                // return JSON in format. status:, food_id:, description_id:
+                element_data.put("description_id", description_id);
+                return jsonUtil._convertJavaMapToJson_Status_Message(element_data);
+                //return
+            });
+        }
+    }
+
+// GET all detail data of food_id from food_menu, food_description tables by food_place_id
+    static class food_menu_in_shop_Task implements Runnable{
+        @Override
+        public void run() {
+
+            get("/v1/food-menu-operation/food-menu-in-shop/:food_place_id", (req, res) -> {
+
+                return food_menu_controller.SelectFood_Menu_For_Guest_Controller(UUID.fromString(req.params(":food_place_id")));
+            });
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
