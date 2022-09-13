@@ -9,15 +9,13 @@ import utils.JSONUtil;
 import utils.PostgreSQLJDBC;
 import utils.PropertiesCache;
 
-import java.sql.Array;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.*;
 
 public class Food_Menu_Repo {
 
     private static final String TABLE_FOOD_MENU = "food_menu";
+    private static final String TABLE_FOOD_DESCRIPTION = "food_description";
     JSONUtil jsonUtil = new JSONUtil();
     PropertiesCache propertiesCache = new PropertiesCache();
     private Logger logger;
@@ -229,13 +227,181 @@ public class Food_Menu_Repo {
         }
     }
 
+// Update food_single_price by food_id. SHOP action.
+    public Map<String, String> UpdateFood_Single_Price(PostgreSQLJDBC post_Connection, UUID food_id, String food_single_price) {
 
+        PreparedStatement ps = null;
+        Statement stmt = null;
+        Map<String, String> element_response = new HashMap<>();
 
+        try {
 
+            // init connection to postgreSQL DB
+            post_Connection.postgreSQlConnect().setAutoCommit(false);
+            System.out.println("UpdateFood_Single_Price : Opened database successfully");
 
+            String update_query = "UPDATE " + TABLE_FOOD_MENU + " SET food_single_price = '" +
+                                    food_single_price + "'" +
+                                    " WHERE " +
+                                    "food_id='" +
+                                    food_id + "' RETURNING food_single_price;";
 
+            // execute sql query
+            stmt = post_Connection.postgreSQlConnect().createStatement();
+            stmt.executeQuery(update_query);
+            post_Connection.postgreSQlConnect().commit();
 
+            // close all
+            stmt.close();
+            post_Connection.postgreSQlConnect().close();
+            System.out.println("UpdateFood_Single_Price : Records updated successfully");
+            // build Map data
+            element_response.put("status", "SUCCESS");
+            element_response.put("message", "Food Single Price is updated");
+            return element_response;
 
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            element_response.put("status", "ERROR");
+            element_response.put("message : ", e.getMessage());
+            return element_response;
+        }
+    }
+
+// Update food_is_removed, food_removed_since by food_id. SHOP action.
+    public Map<String, String> UpdateFood_Is_Removed(PostgreSQLJDBC post_Connection,
+                                                     UUID food_id,
+                                                     boolean food_is_removed,
+                                                     Timestamp food_removed_since) {
+
+        PreparedStatement ps = null;
+        Statement stmt = null;
+        Map<String, String> element_response = new HashMap<>();
+
+        try {
+
+            // init connection to postgreSQL DB
+            post_Connection.postgreSQlConnect().setAutoCommit(false);
+            System.out.println("UpdateFood_Is_Removed : Opened database successfully");
+
+            String update_query = "UPDATE " + TABLE_FOOD_MENU + " SET food_is_removed = " +
+                                        food_is_removed + ", food_removed_since = '" +
+                                        food_removed_since + "'" +
+                                        " WHERE " +
+                                        "food_id='" +
+                                        food_id + "' RETURNING food_is_removed;";
+
+            // execute sql query
+            stmt = post_Connection.postgreSQlConnect().createStatement();
+            stmt.executeQuery(update_query);
+            post_Connection.postgreSQlConnect().commit();
+
+            // close all
+            stmt.close();
+            post_Connection.postgreSQlConnect().close();
+            System.out.println("UpdateFood_Is_Removed : Records updated successfully");
+            // build Map data
+            element_response.put("status", "SUCCESS");
+            element_response.put("message", "Food Is Removed is updated");
+            return element_response;
+
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            element_response.put("status", "ERROR");
+            element_response.put("message : ", e.getMessage());
+            return element_response;
+        }
+    }
+
+// Update food_multi_img_url by food_id. SHOP action.
+    public Map<String, String> UpdateFood_Multi_Img_Url(PostgreSQLJDBC post_Connection,
+                                                     UUID food_id,
+                                                        String[] string_food_multi_img_url) {
+
+        PreparedStatement ps = null;
+        Statement stmt = null;
+        Map<String, String> element_response = new HashMap<>();
+
+        try {
+
+            // init connection to postgreSQL DB
+            post_Connection.postgreSQlConnect().setAutoCommit(false);
+            System.out.println("UpdateFood_Multi_Img_Url : Opened database successfully");
+
+            Array array_food_multi_img_url = post_Connection.postgreSQlConnect().createArrayOf("STRING", string_food_multi_img_url);
+
+            String update_query = "UPDATE " + TABLE_FOOD_MENU + " SET food_multi_img_url = '" +
+                                    array_food_multi_img_url + "'" +
+                                    " WHERE " +
+                                    "food_id='" +
+                                    food_id + "' RETURNING food_multi_img_url;";
+
+            // execute sql query
+            stmt = post_Connection.postgreSQlConnect().createStatement();
+            stmt.executeQuery(update_query);
+            post_Connection.postgreSQlConnect().commit();
+
+            // close all
+            stmt.close();
+            post_Connection.postgreSQlConnect().close();
+            System.out.println("UpdateFood_Multi_Img_Url : Records updated successfully");
+            // build Map data
+            element_response.put("status", "SUCCESS");
+            element_response.put("message", "Food Multi Img Url is updated");
+            return element_response;
+
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            element_response.put("status", "ERROR");
+            element_response.put("message : ", e.getMessage());
+            return element_response;
+        }
+    }
+
+// Update food_multi_video_url by food_id. SHOP action.
+public Map<String, String> UpdateFood_Multi_Video_Url(PostgreSQLJDBC post_Connection,
+                                                    UUID food_id,
+                                                    String[] string_food_multi_video_url) {
+
+    PreparedStatement ps = null;
+    Statement stmt = null;
+    Map<String, String> element_response = new HashMap<>();
+
+    try {
+
+        // init connection to postgreSQL DB
+        post_Connection.postgreSQlConnect().setAutoCommit(false);
+        System.out.println("UpdateFood_Multi_Video_Url : Opened database successfully");
+
+        Array array_food_multi_video_url = post_Connection.postgreSQlConnect().createArrayOf("STRING", string_food_multi_video_url);
+
+        String update_query = "UPDATE " + TABLE_FOOD_MENU + " SET food_multi_video_url = '" +
+                            array_food_multi_video_url + "'" +
+                            " WHERE " +
+                            "food_id='" +
+                            food_id + "' RETURNING food_multi_video_url;";
+
+        // execute sql query
+        stmt = post_Connection.postgreSQlConnect().createStatement();
+        stmt.executeQuery(update_query);
+        post_Connection.postgreSQlConnect().commit();
+
+        // close all
+        stmt.close();
+        post_Connection.postgreSQlConnect().close();
+        System.out.println("UpdateFood_Multi_Video_Url : Records updated successfully");
+        // build Map data
+        element_response.put("status", "SUCCESS");
+        element_response.put("message", "Food Multi Video Url is updated");
+        return element_response;
+
+    } catch (Exception e) {
+        System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        element_response.put("status", "ERROR");
+        element_response.put("message : ", e.getMessage());
+        return element_response;
+    }
+}
 
 
 
