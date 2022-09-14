@@ -56,6 +56,23 @@ public class MainAPI {
         service.execute(new food_multi_video_url_Task());
 
 
+//--------------------------------------------------------------------------------------------
+// Update language_type by description_id
+        service.execute(new language_type_Task());
+
+// Update food_name by description_id
+        service.execute(new food_name_Task());
+
+// Update food_combo_name by description_id
+        service.execute(new food_combo_name_Task());
+
+// Update food_price_in_combo by description_id
+        service.execute(new food_price_in_combo_Task());
+
+// Update food_description by description_id
+        service.execute(new food_description_Task());
+
+
     }// end void main
 
 //**************************************** CRUD API ****************************************
@@ -181,17 +198,80 @@ public class MainAPI {
         }
     }
 
+// Update language_type by description_id
+    static class language_type_Task implements Runnable{
+        @Override
+        public void run() {
 
+            put("/v1/food-description-operation/language-type", (req, res) -> {
 
+                // insert data to DB and return response
+                JSONUtil jsonUtil = new JSONUtil();
+                return jsonUtil._convertJavaMapToJson_Status_Message(food_description_controller.UpdateLanguage_Type_Controller(UUID.fromString(req.queryParams("description_id")),
+                        req.queryParams("language_type")));
+            });
+        }
+    }
 
+// Update food_name by description_id
+    static class food_name_Task implements Runnable{
+        @Override
+        public void run() {
 
+            put("/v1/food-description-operation/food_name", (req, res) -> {
 
+                // insert data to DB and return response
+                JSONUtil jsonUtil = new JSONUtil();
+                return jsonUtil._convertJavaMapToJson_Status_Message(food_description_controller.UpdateFood_Name_Controller(UUID.fromString(req.queryParams("description_id")),
+                        req.queryParams("food_name")));
+            });
+        }
+    }
 
+// Update food_combo_name by description_id
+    static class food_combo_name_Task implements Runnable{
+        @Override
+        public void run() {
 
+            put("/v1/food-description-operation/food-combo-name", (req, res) -> {
 
+                // insert data to DB and return response
+                JSONUtil jsonUtil = new JSONUtil();
+                return jsonUtil._convertJavaMapToJson_Status_Message(food_description_controller.UpdateFood_Combo_Name_Controller(UUID.fromString(req.queryParams("description_id")),
+                        req.queryParamsValues("food_combo_name")));
+            });
+        }
+    }
 
+// Update food_price_in_combo by description_id
+    static class food_price_in_combo_Task implements Runnable{
+        @Override
+        public void run() {
 
+            put("/v1/food-description-operation/food-price-in-combo", (req, res) -> {
 
+                // insert data to DB and return response
+                JSONUtil jsonUtil = new JSONUtil();
+                return jsonUtil._convertJavaMapToJson_Status_Message(food_description_controller.UpdateFood_Price_In_Combo_Controller(UUID.fromString(req.queryParams("description_id")),
+                        req.queryParamsValues("food_price_in_combo")));
+            });
+        }
+    }
+
+// Update food_description by description_id
+    static class food_description_Task implements Runnable{
+        @Override
+        public void run() {
+
+            put("/v1/food-description-operation/food-description", (req, res) -> {
+
+                // insert data to DB and return response
+                JSONUtil jsonUtil = new JSONUtil();
+                return jsonUtil._convertJavaMapToJson_Status_Message(food_description_controller.UpdateFood_Description_Controller(UUID.fromString(req.queryParams("description_id")),
+                        req.queryParams("UpdateFood_Description_Controller")));
+            });
+        }
+    }
 
 
 

@@ -9,6 +9,7 @@ import utils.PostgreSQLJDBC;
 import utils.PropertiesCache;
 
 import java.sql.Array;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -77,6 +78,236 @@ public class Food_Description_Repo {
             return element_data;
         }
     }
+
+// Update language_type by description_id
+    public Map<String, String> UpdateLanguage_Type(PostgreSQLJDBC post_Connection, UUID description_id, String language_type) {
+
+        PreparedStatement ps = null;
+        Statement stmt = null;
+        Map<String, String> element_response = new HashMap<>();
+
+        try {
+
+            // init connection to postgreSQL DB
+            post_Connection.postgreSQlConnect().setAutoCommit(false);
+            System.out.println("UpdateLanguage_Type : Opened database successfully");
+
+            String update_query = "UPDATE " + TABLE_FOOD_DESCRIPTION + " SET language_type = '" +
+                                    language_type + "'" +
+                                    " WHERE " +
+                                    "description_id='" +
+                                    description_id + "' RETURNING description_id;";
+
+            // execute sql query
+            stmt = post_Connection.postgreSQlConnect().createStatement();
+            stmt.executeQuery(update_query);
+            post_Connection.postgreSQlConnect().commit();
+
+            // close all
+            stmt.close();
+            post_Connection.postgreSQlConnect().close();
+            System.out.println("UpdateLanguage_Type : Records updated successfully");
+            // build Map data
+            element_response.put("status", "SUCCESS");
+            element_response.put("message", "Language Type is updated");
+            return element_response;
+
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            element_response.put("status", "ERROR");
+            element_response.put("message : ", e.getMessage());
+            return element_response;
+        }
+    }
+
+// Update food_name by description_id
+    public Map<String, String> UpdateFood_Name(PostgreSQLJDBC post_Connection, UUID description_id, String food_name) {
+
+        PreparedStatement ps = null;
+        Statement stmt = null;
+        Map<String, String> element_response = new HashMap<>();
+
+        try {
+
+            // init connection to postgreSQL DB
+            post_Connection.postgreSQlConnect().setAutoCommit(false);
+            System.out.println("UpdateFood_Name : Opened database successfully");
+
+            String update_query = "UPDATE " + TABLE_FOOD_DESCRIPTION + " SET food_name = '" +
+                                    food_name + "'" +
+                                    " WHERE " +
+                                    "description_id ='" +
+                                    description_id + "' RETURNING description_id;";
+
+            // execute sql query
+            stmt = post_Connection.postgreSQlConnect().createStatement();
+            stmt.executeQuery(update_query);
+            post_Connection.postgreSQlConnect().commit();
+
+            // close all
+            stmt.close();
+            post_Connection.postgreSQlConnect().close();
+            System.out.println("UpdateFood_Name : Records updated successfully");
+            // build Map data
+            element_response.put("status", "SUCCESS");
+            element_response.put("message", "Food Name is updated");
+            return element_response;
+
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            element_response.put("status", "ERROR");
+            element_response.put("message : ", e.getMessage());
+            return element_response;
+        }
+    }
+
+// Update food_combo_name by description_id
+    public Map<String, String> UpdateFood_Combo_Name(PostgreSQLJDBC post_Connection,
+                                                        UUID description_id,
+                                                        String[] string_food_combo_name) {
+
+        PreparedStatement ps = null;
+        Statement stmt = null;
+        Map<String, String> element_response = new HashMap<>();
+
+        try {
+
+            // init connection to postgreSQL DB
+            post_Connection.postgreSQlConnect().setAutoCommit(false);
+            System.out.println("UpdateFood_Combo_Name : Opened database successfully");
+
+            Array array_food_combo_name = post_Connection.postgreSQlConnect().createArrayOf("STRING", string_food_combo_name);
+
+            String update_query = "UPDATE " + TABLE_FOOD_DESCRIPTION + " SET food_combo_name = '" +
+                    array_food_combo_name + "'" +
+                    " WHERE " +
+                    "description_id='" +
+                    description_id + "' RETURNING food_combo_name;";
+
+            // execute sql query
+            stmt = post_Connection.postgreSQlConnect().createStatement();
+            stmt.executeQuery(update_query);
+            post_Connection.postgreSQlConnect().commit();
+
+            // close all
+            stmt.close();
+            post_Connection.postgreSQlConnect().close();
+            System.out.println("UpdateFood_Combo_Name : Records updated successfully");
+            // build Map data
+            element_response.put("status", "SUCCESS");
+            element_response.put("message", "Food Combo Name is updated");
+            return element_response;
+
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            element_response.put("status", "ERROR");
+            element_response.put("message : ", e.getMessage());
+            return element_response;
+        }
+    }
+
+// Update food_price_in_combo by description_id
+    public Map<String, String> UpdateFood_Price_In_Combo(PostgreSQLJDBC post_Connection,
+                                                     UUID description_id,
+                                                     String[] string_food_price_in_combo) {
+
+        PreparedStatement ps = null;
+        Statement stmt = null;
+        Map<String, String> element_response = new HashMap<>();
+
+        try {
+
+            // init connection to postgreSQL DB
+            post_Connection.postgreSQlConnect().setAutoCommit(false);
+            System.out.println("UpdateFood_Price_In_Combo : Opened database successfully");
+
+            Array array_food_price_in_combo = post_Connection.postgreSQlConnect().createArrayOf("STRING", string_food_price_in_combo);
+
+            String update_query = "UPDATE " + TABLE_FOOD_DESCRIPTION + " SET food_price_in_combo = '" +
+                    array_food_price_in_combo + "'" +
+                    " WHERE " +
+                    "description_id='" +
+                    description_id + "' RETURNING food_price_in_combo;";
+
+            // execute sql query
+            stmt = post_Connection.postgreSQlConnect().createStatement();
+            stmt.executeQuery(update_query);
+            post_Connection.postgreSQlConnect().commit();
+
+            // close all
+            stmt.close();
+            post_Connection.postgreSQlConnect().close();
+            System.out.println("UpdateFood_Price_In_Combo : Records updated successfully");
+            // build Map data
+            element_response.put("status", "SUCCESS");
+            element_response.put("message", "Food Price In Combo is updated");
+            return element_response;
+
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            element_response.put("status", "ERROR");
+            element_response.put("message : ", e.getMessage());
+            return element_response;
+        }
+    }
+
+// Update food_description by description_id
+    public Map<String, String> UpdateFood_Description(PostgreSQLJDBC post_Connection, UUID description_id, String food_description) {
+
+        PreparedStatement ps = null;
+        Statement stmt = null;
+        Map<String, String> element_response = new HashMap<>();
+
+        try {
+
+            // init connection to postgreSQL DB
+            post_Connection.postgreSQlConnect().setAutoCommit(false);
+            System.out.println("UpdateFood_Description : Opened database successfully");
+
+            String update_query = "UPDATE " + TABLE_FOOD_DESCRIPTION + " SET food_description = '" +
+                                    food_description + "'" +
+                                    " WHERE " +
+                                    "description_id ='" +
+                                    description_id + "' RETURNING description_id;";
+
+            // execute sql query
+            stmt = post_Connection.postgreSQlConnect().createStatement();
+            stmt.executeQuery(update_query);
+            post_Connection.postgreSQlConnect().commit();
+
+            // close all
+            stmt.close();
+            post_Connection.postgreSQlConnect().close();
+            System.out.println("UpdateFood_Description : Records updated successfully");
+            // build Map data
+            element_response.put("status", "SUCCESS");
+            element_response.put("message", "Food Description is updated");
+            return element_response;
+
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            element_response.put("status", "ERROR");
+            element_response.put("message : ", e.getMessage());
+            return element_response;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
